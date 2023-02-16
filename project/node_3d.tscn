@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://btrxsygj57rwj"]
+
+[ext_resource type="Script" path="res://Node3D.gd" id="1_p3qyo"]
+
+[sub_resource type="RDShaderFile" id="RDShaderFile_pd5qo"]
+
+[sub_resource type="GPUUniform" id="GPUUniform_snwbk"]
+
+[sub_resource type="UniformSet" id="UniformSet_v78ho"]
+uniforms = Array[GPUUniform]([SubResource("GPUUniform_snwbk")])
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_p3qyo")
+
+[node name="Summator" type="Summator" parent="."]
+
+[node name="ComputeWorker" type="ComputeWorker" parent="."]
+shader_file = SubResource("RDShaderFile_pd5qo")
+uniform_sets = Array[UniformSet]([SubResource("UniformSet_v78ho")])
+work_group_size = Vector3i(1, 1, 0)
+
+[connection signal="custom_signal" from="Summator" to="." method="_on_summator_custom_signal"]
