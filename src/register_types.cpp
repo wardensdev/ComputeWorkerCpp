@@ -3,6 +3,7 @@
 #include "compute_worker.h"
 #include "uniform_set.h"
 #include "gpu_uniform.h"
+#include "gpu_float.h"
 #include <gdextension_interface.h>
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/core/defs.hpp>
@@ -20,6 +21,8 @@ void initialize_summator_types(ModuleInitializationLevel p_level){
     ClassDB::register_class<ComputeWorker>();
     ClassDB::register_class<UniformSet>();
     ClassDB::register_class<GPUUniform>();
+
+    ClassDB::register_class<GPU_Float>();
 }
 
 

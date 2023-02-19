@@ -6,15 +6,21 @@
 #include <godot_cpp/classes/rd_shader_spirv.hpp>
 #include <godot_cpp/classes/rendering_server.hpp>
 #include <godot_cpp/classes/rendering_device.hpp>
+#include <godot_cpp/classes/node.hpp>
 
 using namespace godot;
 
-ComputeWorker::ComputeWorker(){};
-ComputeWorker::~ComputeWorker(){};
+ComputeWorker::ComputeWorker(){}
+ComputeWorker::~ComputeWorker(){}
 
 void ComputeWorker::initialize(){
 
     ERR_FAIL_COND_MSG(rd != nullptr, "Call `destroy()` before initializing ComputeWorker.");
+    ERR_FAIL_COND_MSG(shader_file == nullptr, "You must assign a shader file.");
+    ERR_FAIL_COND_MSG(uniform_sets.size() == 0, "You must define at least one uniform set.");
+    
+    float wg_size = work_group_size.x * work_group_size.y * work_group_size.z;
+    ERR_FAIL_COND_MSG(wg_size < 1, "Work group size must be greater than zero.");
 
     if(use_global_device){
         RenderingDevice *n_rd = RenderingServer::get_singleton()->get_rendering_device();
@@ -41,12 +47,12 @@ void ComputeWorker::initialize(){
 }
 
 
-RenderingDevice *ComputeWorker::get_rendering_device(){
+RenderingDevice *ComputeWorker::get_rendering_device() const {
     return rd;
 }
 
 
-bool ComputeWorker::is_device_processing(){
+bool ComputeWorker::is_device_processing() const {
     return _is_device_processing;
 }
 
@@ -151,7 +157,7 @@ Ref<GPUUniform> ComputeWorker::get_uniform_by_binding(int binding, int set_id){
 
         gp = us->uniforms[i];
 
-        if(gp->binding == binding){
+        if(gp->get_binding() == binding){
             return gp;
         }
     }
@@ -169,7 +175,7 @@ Ref<GPUUniform> ComputeWorker::get_uniform_by_alias(String alias, int set_id){
 
         gp = us->uniforms[i];
 
-        if(gp->alias == alias){
+        if(gp->get_alias() == alias){
             return gp;
         }
     }
@@ -188,8 +194,8 @@ int ComputeWorker::get_uniform_binding_by_alias(String alias, int set_id){
 
         gp = us->uniforms[i];
 
-        if(gp->alias == alias){
-            return gp->binding;
+        if(gp->get_alias() == alias){
+            return gp->get_binding();
         }
     }
     
@@ -198,7 +204,7 @@ int ComputeWorker::get_uniform_binding_by_alias(String alias, int set_id){
 }
 
 
-Ref<RDShaderFile> ComputeWorker::get_shader_file(){
+Ref<RDShaderFile> ComputeWorker::get_shader_file() const {
     return shader_file;
 };
 
@@ -208,7 +214,7 @@ void ComputeWorker::set_shader_file(Ref<RDShaderFile> file){
 };
 
 
-TypedArray<UniformSet> ComputeWorker::get_uniform_sets(){
+TypedArray<UniformSet> ComputeWorker::get_uniform_sets() const {
     return uniform_sets;
 }
 
@@ -218,7 +224,7 @@ void ComputeWorker::set_uniform_sets(TypedArray<UniformSet> sets){
 }
 
 
-Vector3i ComputeWorker::get_work_group_size(){
+Vector3i ComputeWorker::get_work_group_size() const {
     return work_group_size;
 }
 
@@ -228,7 +234,7 @@ void ComputeWorker::set_work_group_size(Vector3i size){
 }
 
 
-bool ComputeWorker::get_use_global_device(){
+bool ComputeWorker::get_use_global_device() const {
     return use_global_device;
 }
 

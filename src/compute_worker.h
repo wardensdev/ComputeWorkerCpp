@@ -40,30 +40,30 @@ class ComputeWorker : public Node
         Vector3i work_group_size;
         bool use_global_device;
 
-        Ref<RDShaderFile> get_shader_file();
+        Ref<RDShaderFile> get_shader_file() const;
         void set_shader_file(Ref<RDShaderFile> file);
-        TypedArray<UniformSet> get_uniform_sets();
+        TypedArray<UniformSet> get_uniform_sets() const;
         void set_uniform_sets(TypedArray<UniformSet> sets);
-        Vector3i get_work_group_size();
+        Vector3i get_work_group_size() const;
         void set_work_group_size(Vector3i size);
-        bool get_use_global_device();
+        bool get_use_global_device() const;
         void set_use_global_device(bool value);
 
         void initialize();
-        RenderingDevice *get_rendering_device();
-        bool is_device_processing();
-        Variant get_uniform_data(int binding, int set_id);
-        Variant get_uniform_data_by_alias(String alias, int set_id);
-        void set_uniform_data(int binding, int set_id, Variant data, bool dispatch);
-        void set_uniform_data_by_alias(String alias, int set_id, Variant data, bool dispatch);
+        RenderingDevice *get_rendering_device() const;
+        bool is_device_processing() const;
+        Variant get_uniform_data(const int binding, const int set_id);
+        Variant get_uniform_data_by_alias(const String alias, const int set_id);
+        void set_uniform_data(const int binding, const int set_id, const Variant data, const bool dispatch);
+        void set_uniform_data_by_alias(const String alias, const int set_id, const Variant data, const bool dispatch);
         void dispatch_compute_list();
         void begin();
         void end();
         
-        Ref<UniformSet> get_uniform_set_by_id(int set_id);
-        Ref<GPUUniform> get_uniform_by_binding(int binding, int set_id);
-        Ref<GPUUniform> get_uniform_by_alias(String alias, int set_id);
-        int get_uniform_binding_by_alias(String alias, int set_id);
+        Ref<UniformSet> get_uniform_set_by_id(const int set_id);
+        Ref<GPUUniform> get_uniform_by_binding(const int binding, const int set_id);
+        Ref<GPUUniform> get_uniform_by_alias(const String alias, const int set_id);
+        int get_uniform_binding_by_alias(const String alias, const int set_id);
 
 };
 

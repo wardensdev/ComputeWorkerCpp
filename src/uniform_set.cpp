@@ -35,8 +35,8 @@ void UniformSet::destroy(RenderingDevice *rd)
 
         Ref<GPUUniform> uu = uniforms[i];
 
-        rd->free_rid(uu->buffer_rid);
-        uu->uniform->clear_ids();
+        rd->free_rid(uu->get_buffer_rid());
+        uu->get_uniform()->clear_ids();
     }
 }
 

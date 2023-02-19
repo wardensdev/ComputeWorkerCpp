@@ -24,7 +24,7 @@ class UniformSet : public Resource
         ~UniformSet();
 
         TypedArray<GPUUniform> uniforms;
-        int set_id;
+        int set_id = 0;
         RID uniform_set_rid;
 
         void initialize(RenderingDevice *rd, RID shader_rid);
