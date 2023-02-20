@@ -2,6 +2,7 @@
 #include "gpu_uniform.h"
 #include <godot_cpp/classes/rendering_device.hpp>
 #include <godot_cpp/classes/rd_uniform.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 using namespace godot;
 
@@ -9,21 +10,18 @@ UniformSet::UniformSet(){}
 UniformSet::~UniformSet(){}
 
 void UniformSet::initialize(RenderingDevice *rd, RID shader_rid)
-{
-    
+{   
     TypedArray<RDUniform> uniform_set;
-    uniform_set.resize(uniforms.size());
-
+    
     for(int i = 0; i < uniforms.size(); i++)
-    {
-        Ref<GPUUniform> uu = uniforms[i];
+    {        
+        Ref<GPUUniform> uu = Ref<GPUUniform>(uniforms[i]);
         Ref<RDUniform> rdu = uu->initialize(rd);
         
         uniform_set.push_back(rdu);
     }
 
     uniform_set_rid = rd->uniform_set_create(uniform_set, shader_rid, set_id);
-    
 }
 
 void UniformSet::destroy(RenderingDevice *rd)
@@ -32,7 +30,6 @@ void UniformSet::destroy(RenderingDevice *rd)
 
     for(int i = 0; i < uniforms.size(); i++)
     {
-
         Ref<GPUUniform> uu = uniforms[i];
 
         rd->free_rid(uu->get_buffer_rid());

@@ -1,7 +1,7 @@
-#ifndef EXAMPLE_REGISTER_TYPES_H
-#define EXAMPLE_REGISTER_TYPES_H
+#ifndef COMPUTE_REGISTER_TYPES_H
+#define COMPUTE_REGISTER_TYPES_H
 
-void initialize_test_types();
-void uninitialize_test_types();
+void initialize_compute_types();
+void uninitialize_compute_types();
 
-#endif // EXAMPLE_REGISTER_TYPES_H
+#endif // COMPUTE_REGISTER_TYPES_H

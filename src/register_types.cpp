@@ -1,5 +1,4 @@
 #include "register_types.h"
-#include "summator.h"
 #include "compute_worker.h"
 #include "uniform_set.h"
 #include "gpu_uniform.h"
@@ -8,25 +7,25 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 using namespace godot;
 
-void initialize_summator_types(ModuleInitializationLevel p_level){
-
-    if(p_level != MODULE_INITIALIZATION_LEVEL_SCENE){
+void initialize_compute_types(ModuleInitializationLevel p_level)
+{
+    if(p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
+    {
         return;
     }
 
-    ClassDB::register_class<Summator>();
     ClassDB::register_class<ComputeWorker>();
     ClassDB::register_class<UniformSet>();
-    ClassDB::register_class<GPUUniform>();
-
+    ClassDB::register_class<GPUUniform>(true);
     ClassDB::register_class<GPU_Float>();
 }
 
 
-void uninitialize_summator_types(ModuleInitializationLevel p_level){
+void uninitialize_compute_types(ModuleInitializationLevel p_level){
 
     if(p_level != MODULE_INITIALIZATION_LEVEL_SCENE){
         return;
@@ -40,8 +39,8 @@ extern "C"
     {
         GDExtensionBinding::InitObject init_obj(p_interface, p_library, r_initialization);
 
-        init_obj.register_initializer(initialize_summator_types);
-        init_obj.register_terminator(uninitialize_summator_types);
+        init_obj.register_initializer(initialize_compute_types);
+        init_obj.register_terminator(uninitialize_compute_types);
         init_obj.set_minimum_library_initialization_level(MODULE_INITIALIZATION_LEVEL_SCENE);
 
         return init_obj.init();

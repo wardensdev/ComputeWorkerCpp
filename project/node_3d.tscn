@@ -1,23 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://btrxsygj57rwj"]
+[gd_scene load_steps=6 format=3 uid="uid://btrxsygj57rwj"]
 
 [ext_resource type="Script" path="res://Node3D.gd" id="1_p3qyo"]
 [ext_resource type="RDShaderFile" uid="uid://bx0kteiid0ssd" path="res://test.glsl" id="2_hfb0u"]
 
 [sub_resource type="GPU_Float" id="GPU_Float_vy3l4"]
-data = 1.0
+data = 1.131
 alias = "test_float"
+uniform_type = 1
+
+[sub_resource type="GPU_Float" id="GPU_Float_5hq5a"]
+uniform_type = 19641227
 
 [sub_resource type="UniformSet" id="UniformSet_tugp4"]
-uniforms = Array[GPUUniform]([SubResource("GPU_Float_vy3l4")])
+uniforms = Array[GPUUniform]([SubResource("GPU_Float_vy3l4"), SubResource("GPU_Float_5hq5a")])
 
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_p3qyo")
-
-[node name="Summator" type="Summator" parent="."]
 
 [node name="ComputeWorker" type="ComputeWorker" parent="."]
 shader_file = ExtResource("2_hfb0u")
 uniform_sets = Array[UniformSet]([SubResource("UniformSet_tugp4")])
 work_group_size = Vector3i(1, 1, 1)
-
-[connection signal="custom_signal" from="Summator" to="." method="_on_summator_custom_signal"]

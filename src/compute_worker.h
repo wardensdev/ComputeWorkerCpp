@@ -23,7 +23,7 @@ class ComputeWorker : public Node
         static void _bind_methods();
 
     private:
-        RenderingDevice *rd = nullptr;
+        RenderingDevice *rd;
         RID compute_pipeline_rid;
         RID shader_rid;
 
@@ -38,7 +38,7 @@ class ComputeWorker : public Node
         Ref<RDShaderFile> shader_file;
         TypedArray<UniformSet> uniform_sets;
         Vector3i work_group_size;
-        bool use_global_device;
+        bool use_global_device = false;
 
         Ref<RDShaderFile> get_shader_file() const;
         void set_shader_file(Ref<RDShaderFile> file);

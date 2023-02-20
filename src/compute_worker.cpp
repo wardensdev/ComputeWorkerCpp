@@ -7,35 +7,37 @@
 #include <godot_cpp/classes/rendering_server.hpp>
 #include <godot_cpp/classes/rendering_device.hpp>
 #include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 using namespace godot;
 
 ComputeWorker::ComputeWorker(){}
 ComputeWorker::~ComputeWorker(){}
 
-void ComputeWorker::initialize(){
-
-    ERR_FAIL_COND_MSG(rd != nullptr, "Call `destroy()` before initializing ComputeWorker.");
+void ComputeWorker::initialize()
+{
+    ERR_FAIL_COND_MSG(rd != nullptr, "ComputeWorker already initialized. Call `destroy()` first.");
     ERR_FAIL_COND_MSG(shader_file == nullptr, "You must assign a shader file.");
     ERR_FAIL_COND_MSG(uniform_sets.size() == 0, "You must define at least one uniform set.");
     
     float wg_size = work_group_size.x * work_group_size.y * work_group_size.z;
     ERR_FAIL_COND_MSG(wg_size < 1, "Work group size must be greater than zero.");
 
-    if(use_global_device){
-        RenderingDevice *n_rd = RenderingServer::get_singleton()->get_rendering_device();
-        rd = n_rd;
+    if(use_global_device)
+    {
+        rd = RenderingServer::get_singleton()->get_rendering_device();
     }
-    else{
-        RenderingDevice *n_rd = RenderingServer::get_singleton()->create_local_rendering_device();
-        rd = n_rd;
+    else
+    {
+        rd = RenderingServer::get_singleton()->create_local_rendering_device();
     }
-
+    
     Ref<RDShaderSPIRV> shader_spirv = shader_file->get_spirv();
     shader_rid = rd->shader_create_from_spirv(shader_spirv);
 
-    for(int i = 0; i < uniform_sets.size(); i++){
-        Ref<UniformSet> uu = uniform_sets[i];
+    for(int i = 0; i < uniform_sets.size(); i++)
+    {
+        Ref<UniformSet> uu = Ref<UniformSet>(uniform_sets[i]);
         uu->initialize(rd, shader_rid);
     }
 
@@ -47,17 +49,20 @@ void ComputeWorker::initialize(){
 }
 
 
-RenderingDevice *ComputeWorker::get_rendering_device() const {
+RenderingDevice *ComputeWorker::get_rendering_device() const
+{
     return rd;
 }
 
 
-bool ComputeWorker::is_device_processing() const {
+bool ComputeWorker::is_device_processing() const
+{
     return _is_device_processing;
 }
 
 
-Variant ComputeWorker::get_uniform_data(int binding, int set_id){
+Variant ComputeWorker::get_uniform_data(int binding, int set_id)
+{
     ERR_FAIL_COND_V_MSG(!initialized, 0, "ComputeWorker must be initialized before accessing uniform data");
     
     Ref<GPUUniform> gp = get_uniform_by_binding(binding, set_id);
@@ -66,7 +71,8 @@ Variant ComputeWorker::get_uniform_data(int binding, int set_id){
 }
 
 
-Variant ComputeWorker::get_uniform_data_by_alias(String alias, int set_id){
+Variant ComputeWorker::get_uniform_data_by_alias(String alias, int set_id)
+{
     ERR_FAIL_COND_V_MSG(!initialized, 0, "ComputeWorker must be initialized before accessing uniform data");
 
     Ref<GPUUniform> gp = get_uniform_by_alias(alias, set_id);
@@ -75,37 +81,43 @@ Variant ComputeWorker::get_uniform_data_by_alias(String alias, int set_id){
 }
 
 
-void ComputeWorker::set_uniform_data(int binding, int set_id, Variant data, bool dispatch){
+void ComputeWorker::set_uniform_data(int binding, int set_id, Variant data, bool dispatch)
+{
     ERR_FAIL_COND_MSG(!initialized, "ComputeWorker must be initialized before accessing uniform data");
 
     Ref<GPUUniform> gp = get_uniform_by_binding(binding, set_id);
     gp->set_uniform_data(rd, data);
 
-    if(dispatch){
+    if(dispatch)
+    {
         dispatch_compute_list();
         begin();
     }
 }
 
 
-void ComputeWorker::set_uniform_data_by_alias(String alias, int set_id, Variant data, bool dispatch){
+void ComputeWorker::set_uniform_data_by_alias(String alias, int set_id, Variant data, bool dispatch)
+{
     ERR_FAIL_COND_MSG(!initialized, "ComputeWorker must be initialized before accessing uniform data");
 
     Ref<GPUUniform> gp = get_uniform_by_alias(alias, set_id);
     gp->set_uniform_data(rd, data);
 
-    if(dispatch){
+    if(dispatch)
+    {
         dispatch_compute_list();
         begin();
     }
 }
 
 
-void ComputeWorker::dispatch_compute_list(){
+void ComputeWorker::dispatch_compute_list()
+{
     int64_t compute_list_rid = rd->compute_list_begin();
     rd->compute_list_bind_compute_pipeline(compute_list_rid, compute_pipeline_rid);
 
-    for(int i = 0; i < uniform_sets.size(); i++){
+    for(int i = 0; i < uniform_sets.size(); i++)
+    {
         Ref<UniformSet> us = uniform_sets[i];
         rd->compute_list_bind_uniform_set(compute_list_rid, us->uniform_set_rid, us->set_id);
     }
@@ -115,7 +127,8 @@ void ComputeWorker::dispatch_compute_list(){
 }
 
 
-void ComputeWorker::begin(){
+void ComputeWorker::begin()
+{
     ERR_FAIL_COND_MSG(use_global_device, "Cannot use function `begin()` while  `use_global_device` is true.");
 
     _is_device_processing = true;
@@ -123,22 +136,23 @@ void ComputeWorker::begin(){
 }
 
 
-void ComputeWorker::end(){
-
+void ComputeWorker::end()
+{
     rd->sync();
     _is_device_processing = false;
 }
 
 
-Ref<UniformSet> ComputeWorker::get_uniform_set_by_id(int set_id){
-
+Ref<UniformSet> ComputeWorker::get_uniform_set_by_id(int set_id)
+{
     Ref<UniformSet> ret;
 
-    for(int i = 0; i < uniform_sets.size(); i++){
-
+    for(int i = 0; i < uniform_sets.size(); i++)
+    {
         ret = uniform_sets[i];
 
-        if(ret->set_id == set_id){
+        if(ret->set_id == set_id)
+        {
             return ret;
         }
     }
@@ -148,34 +162,37 @@ Ref<UniformSet> ComputeWorker::get_uniform_set_by_id(int set_id){
 }
 
 
-Ref<GPUUniform> ComputeWorker::get_uniform_by_binding(int binding, int set_id){
-
+Ref<GPUUniform> ComputeWorker::get_uniform_by_binding(int binding, int set_id)
+{
     Ref<UniformSet> us = get_uniform_set_by_id(set_id);
     Ref<GPUUniform> gp;
 
-    for(int i = 0; i < us->uniforms.size(); i++){
-
+    for(int i = 0; i < us->uniforms.size(); i++)
+    {
         gp = us->uniforms[i];
 
-        if(gp->get_binding() == binding){
+        if(gp->get_binding() == binding)
+        {
             return gp;
         }
     }
+
     ERR_FAIL_NULL_V_MSG(gp, 0, "GPUUniform not found for binding " + String::num(binding));
     return gp;
 }
 
 
-Ref<GPUUniform> ComputeWorker::get_uniform_by_alias(String alias, int set_id){
-
+Ref<GPUUniform> ComputeWorker::get_uniform_by_alias(String alias, int set_id)
+{
     Ref<UniformSet> us = get_uniform_set_by_id(set_id);
     Ref<GPUUniform> gp;
 
-    for(int i = 0; i < us->uniforms.size(); i++){
-
+    for(int i = 0; i < us->uniforms.size(); i++)
+    {
         gp = us->uniforms[i];
 
-        if(gp->get_alias() == alias){
+        if(gp->get_alias() == alias)
+        {
             return gp;
         }
     }
@@ -185,16 +202,17 @@ Ref<GPUUniform> ComputeWorker::get_uniform_by_alias(String alias, int set_id){
 }
 
 
-int ComputeWorker::get_uniform_binding_by_alias(String alias, int set_id){
-    
+int ComputeWorker::get_uniform_binding_by_alias(String alias, int set_id)
+{
     Ref<UniformSet> us = get_uniform_set_by_id(set_id);
     Ref<GPUUniform> gp;
 
-    for(int i = 0; i < us->uniforms.size(); i++){
-
+    for(int i = 0; i < us->uniforms.size(); i++)
+    {
         gp = us->uniforms[i];
 
-        if(gp->get_alias() == alias){
+        if(gp->get_alias() == alias)
+        {
             return gp->get_binding();
         }
     }
@@ -204,51 +222,59 @@ int ComputeWorker::get_uniform_binding_by_alias(String alias, int set_id){
 }
 
 
-Ref<RDShaderFile> ComputeWorker::get_shader_file() const {
+Ref<RDShaderFile> ComputeWorker::get_shader_file() const
+{
     return shader_file;
-};
+}
 
 
-void ComputeWorker::set_shader_file(Ref<RDShaderFile> file){
+void ComputeWorker::set_shader_file(Ref<RDShaderFile> file)
+{
     shader_file = file;
-};
+}
 
 
-TypedArray<UniformSet> ComputeWorker::get_uniform_sets() const {
+TypedArray<UniformSet> ComputeWorker::get_uniform_sets() const
+{
     return uniform_sets;
 }
 
 
-void ComputeWorker::set_uniform_sets(TypedArray<UniformSet> sets){
+void ComputeWorker::set_uniform_sets(TypedArray<UniformSet> sets)
+{
     uniform_sets = sets;
 }
 
 
-Vector3i ComputeWorker::get_work_group_size() const {
+Vector3i ComputeWorker::get_work_group_size() const
+{
     return work_group_size;
 }
 
 
-void ComputeWorker::set_work_group_size(Vector3i size){
+void ComputeWorker::set_work_group_size(Vector3i size)
+{
     work_group_size = size;
 }
 
 
-bool ComputeWorker::get_use_global_device() const {
+bool ComputeWorker::get_use_global_device() const
+{
     return use_global_device;
 }
 
 
-void ComputeWorker::set_use_global_device(bool value){
+void ComputeWorker::set_use_global_device(bool value)
+{
     use_global_device = value;
 }
 
 
-void ComputeWorker::_bind_methods(){
-
+void ComputeWorker::_bind_methods()
+{
     ClassDB::bind_method(D_METHOD("initialize"), &ComputeWorker::initialize);
     ClassDB::bind_method(D_METHOD("get_rendering_device"), &ComputeWorker::get_rendering_device);
-    ClassDB::bind_method(D_METHOD("is_processing"), &ComputeWorker::is_processing);
+    ClassDB::bind_method(D_METHOD("is_device_processing"), &ComputeWorker::is_device_processing);
     ClassDB::bind_method(D_METHOD("get_uniform_data", "binding", "set_id"), &ComputeWorker::get_uniform_data);
     ClassDB::bind_method(D_METHOD("get_uniform_data_by_alias", "alias", "set_id"), &ComputeWorker::get_uniform_data_by_alias);
     ClassDB::bind_method(D_METHOD("set_uniform_data", "binding", "set_id", "data", "dispatch"), &ComputeWorker::set_uniform_data);
@@ -275,5 +301,4 @@ void ComputeWorker::_bind_methods(){
     ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "uniform_sets", PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "UniformSet")), "set_uniform_sets", "get_uniform_sets");
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3I, "work_group_size"), "set_work_group_size", "get_work_group_size");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "use_global_device"), "set_use_global_device", "get_use_global_device");
-
 }

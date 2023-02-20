@@ -26,13 +26,13 @@ class GPU_Float : public GPUUniform
         GPU_Float();
         ~GPU_Float();
 
-        float data = 0.0;
+        double data = 0.0;
         UNIFORM_TYPES uniform_type;
 
         Ref<RDUniform> initialize(RenderingDevice *rd);
         Variant get_uniform_data(RenderingDevice *rd);
         void set_uniform_data(RenderingDevice *rd, Variant value);
-        PackedByteArray float_to_byte_array(float value);
+        PackedByteArray float_to_byte_array(double value);
         float byte_array_to_float(PackedByteArray bytes);
 
         float get_data();

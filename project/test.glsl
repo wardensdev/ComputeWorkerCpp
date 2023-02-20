@@ -9,5 +9,5 @@ layout(binding = 0, set = 0) buffer Test{
 };
 
 void main(){
-    test_float += 0.001;
+    test_float += 1.0;
 }

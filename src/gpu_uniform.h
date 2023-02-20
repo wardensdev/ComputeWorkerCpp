@@ -32,7 +32,8 @@ class GPUUniform : public Resource
 
         virtual ~GPUUniform() {}
 
-        enum UNIFORM_TYPES{
+        enum UNIFORM_TYPES
+        {
             UNIFORM_BUFFER,
             STORAGE_BUFFER
         };
