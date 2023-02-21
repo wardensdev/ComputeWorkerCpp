@@ -25,7 +25,7 @@ class GPU_Boolean : public GPUUniform
         GPU_Boolean();
         ~GPU_Boolean();
 
-        bool data = 0;
+        bool data;
         UNIFORM_TYPES uniform_type;
 
         Ref<RDUniform> initialize(RenderingDevice *rd);

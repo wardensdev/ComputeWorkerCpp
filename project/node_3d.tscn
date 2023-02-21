@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://btrxsygj57rwj"]
 
 [ext_resource type="Script" path="res://Node3D.gd" id="1_p3qyo"]
-[ext_resource type="RDShaderFile" uid="uid://bx0kteiid0ssd" path="res://test.glsl" id="2_hfb0u"]
+[ext_resource type="RDShaderFile" uid="uid://bx0kteiid0ssd" path="res://test.glsl" id="2_ee6qv"]
 
 [sub_resource type="GPU_Float" id="GPU_Float_vy3l4"]
 data = 1.131
@@ -9,6 +9,7 @@ alias = "test_float"
 uniform_type = 1
 
 [sub_resource type="GPU_Boolean" id="GPU_Boolean_6ykc0"]
+data = true
 alias = "test_bool"
 binding = 1
 uniform_type = 1
@@ -20,6 +21,6 @@ uniforms = Array[GPUUniform]([SubResource("GPU_Float_vy3l4"), SubResource("GPU_B
 script = ExtResource("1_p3qyo")
 
 [node name="ComputeWorker" type="ComputeWorker" parent="."]
-shader_file = ExtResource("2_hfb0u")
+shader_file = ExtResource("2_ee6qv")
 uniform_sets = Array[UniformSet]([SubResource("UniformSet_tugp4")])
 work_group_size = Vector3i(1, 1, 1)
