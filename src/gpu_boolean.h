@@ -1,5 +1,5 @@
-#ifndef GPU_FLOAT_CLASS_H
-#define GPU_FLOAT_CLASS_H
+#ifndef GPU_BOOLEAN_CLASS_H
+#define GPU_BOOLEAN_CLASS_H
 
 #ifdef WIN32
 #include <windows.h>
@@ -11,32 +11,31 @@
 
 using namespace godot;
 
-class GPU_Float : public GPUUniform
+class GPU_Boolean : public GPUUniform
 {
-    GDCLASS(GPU_Float, GPUUniform);
+    GDCLASS(GPU_Boolean, GPUUniform);
 
     protected:
         static void _bind_methods();
 
         Ref<RDUniform> create_uniform();
         RID create_rid(RenderingDevice *rd);
-
+    
     public:
+        GPU_Boolean();
+        ~GPU_Boolean();
 
-        GPU_Float();
-        ~GPU_Float();
-
-        double data = 0.0;
+        bool data = 0;
         UNIFORM_TYPES uniform_type;
 
         Ref<RDUniform> initialize(RenderingDevice *rd);
         Variant get_uniform_data(RenderingDevice *rd);
         void set_uniform_data(RenderingDevice *rd, Variant value);
-        PackedByteArray float_to_byte_array(double value);
-        float byte_array_to_float(PackedByteArray bytes);
+        PackedByteArray bool_to_byte_array(bool value);
+        bool byte_array_to_bool(PackedByteArray bytes);
 
-        float get_data();
-        void set_data(float value);
+        bool get_data();
+        void set_data(bool value);
         String get_alias();
         void set_alias(String value);
         int get_binding();
@@ -48,6 +47,4 @@ class GPU_Float : public GPUUniform
         void set_uniform_type(UNIFORM_TYPES type);
 };
 
-
-
-#endif // GPU_FLOAT_CLASS_H
+#endif // GPU_BOOLEAN_CLASS_H

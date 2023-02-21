@@ -5,8 +5,8 @@
 #include <windows.h>
 #endif
 
-#include <godot_cpp/classes/resource.hpp>
 #include "gpu_uniform.h"
+#include <godot_cpp/classes/resource.hpp>
 
 using namespace godot;
 

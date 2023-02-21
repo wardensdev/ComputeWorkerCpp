@@ -19,7 +19,6 @@ class GPUUniform : public Resource
         static void _bind_methods() {}
 
         String alias;
-        Variant data;
         int binding = 0;
 
         RID buffer_rid;

@@ -8,6 +8,11 @@ layout(binding = 0, set = 0) buffer Test{
     float test_float;
 };
 
+layout(binding = 1, set = 0) buffer Boo{
+    bool test_bool;
+};
+
 void main(){
     test_float += 1.0;
+    test_bool = !test_bool;
 }

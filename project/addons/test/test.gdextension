@@ -1,6 +1,6 @@
 [configuration]
 
-entry_symbol = "summator_library_init"
+entry_symbol = "compute_library_init"
 
 [libraries]
 

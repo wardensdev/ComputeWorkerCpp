@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://btrxsygj57rwj"]
+[gd_scene load_steps=6 format=3 uid="uid://btrxsygj57rwj"]
 
 [ext_resource type="Script" path="res://Node3D.gd" id="1_p3qyo"]
 [ext_resource type="RDShaderFile" uid="uid://bx0kteiid0ssd" path="res://test.glsl" id="2_hfb0u"]
@@ -8,8 +8,13 @@ data = 1.131
 alias = "test_float"
 uniform_type = 1
 
+[sub_resource type="GPU_Boolean" id="GPU_Boolean_6ykc0"]
+alias = "test_bool"
+binding = 1
+uniform_type = 1
+
 [sub_resource type="UniformSet" id="UniformSet_tugp4"]
-uniforms = Array[GPUUniform]([SubResource("GPU_Float_vy3l4")])
+uniforms = Array[GPUUniform]([SubResource("GPU_Float_vy3l4"), SubResource("GPU_Boolean_6ykc0")])
 
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_p3qyo")

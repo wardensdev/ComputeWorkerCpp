@@ -3,6 +3,8 @@
 #include "uniform_set.h"
 #include "gpu_uniform.h"
 #include "gpu_float.h"
+#include "gpu_boolean.h"
+
 #include <gdextension_interface.h>
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/core/defs.hpp>
@@ -22,6 +24,7 @@ void initialize_compute_types(ModuleInitializationLevel p_level)
     ClassDB::register_class<UniformSet>();
     ClassDB::register_class<GPUUniform>(true);
     ClassDB::register_class<GPU_Float>();
+    ClassDB::register_class<GPU_Boolean>();
 }
 
 
@@ -35,7 +38,7 @@ void uninitialize_compute_types(ModuleInitializationLevel p_level){
 
 extern "C"
 {
-    GDExtensionBool GDE_EXPORT summator_library_init(const GDExtensionInterface *p_interface, const GDExtensionClassLibraryPtr p_library, GDExtensionInitialization *r_initialization)
+    GDExtensionBool GDE_EXPORT compute_library_init(const GDExtensionInterface *p_interface, const GDExtensionClassLibraryPtr p_library, GDExtensionInitialization *r_initialization)
     {
         GDExtensionBinding::InitObject init_obj(p_interface, p_library, r_initialization);
 
