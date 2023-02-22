@@ -46,7 +46,13 @@ func _process(delta):
 		$ComputeWorker.end()
 	
 	var f = $ComputeWorker.get_uniform_data_by_alias("test_float", 0)
-	print(f)
+#	print(f)
 	
 	var a = $ComputeWorker.get_uniform_data_by_alias("test_bool", 0)
 #	print(a)
+	
+	var s = $ComputeWorker.get_uniform_data_by_alias("test_signed", 0)
+	print(s)
+	
+	var d = $ComputeWorker.get_uniform_data_by_alias("test_unsigned", 0)
+	print(d)

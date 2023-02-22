@@ -12,6 +12,14 @@ layout(binding = 1, set = 0) buffer Boo{
     bool test_bool;
 };
 
+layout(binding = 2, set = 0) buffer Signed{
+    int test_signed;
+};
+
+layout(binding = 3, set = 0) buffer Unsigned{
+    uint test_unsigned;
+};
+
 void main(){
     test_float += 1.0;
     test_bool = !test_bool;

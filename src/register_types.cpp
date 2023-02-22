@@ -4,6 +4,7 @@
 #include "gpu_uniform.h"
 #include "gpu_float.h"
 #include "gpu_boolean.h"
+#include "gpu_integer.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/class_db.hpp>
@@ -25,6 +26,7 @@ void initialize_compute_types(ModuleInitializationLevel p_level)
     ClassDB::register_class<GPUUniform>(true);
     ClassDB::register_class<GPU_Float>();
     ClassDB::register_class<GPU_Boolean>();
+    ClassDB::register_class<GPU_Integer>();
 }
 
 
