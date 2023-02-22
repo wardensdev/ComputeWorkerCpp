@@ -46,7 +46,7 @@ Ref<RDUniform> GPU_Float::create_uniform()
 RID GPU_Float::create_rid(RenderingDevice *rd)
 {
     PackedByteArray bytes = float_to_byte_array(data);
-
+    
     RID buffer;
 
     switch (uniform_type)
@@ -70,7 +70,7 @@ RID GPU_Float::create_rid(RenderingDevice *rd)
 Variant GPU_Float::get_uniform_data(RenderingDevice *rd)
 {
     PackedByteArray out = rd->buffer_get_data(buffer_rid);
-    return out.decode_float(0);
+    return byte_array_to_float(out);
 }
 
 
@@ -85,27 +85,37 @@ void GPU_Float::set_uniform_data(RenderingDevice *rd, Variant value)
 
 PackedByteArray GPU_Float::float_to_byte_array(double value)
 {
-    PackedByteArray bytes;
-    bytes.resize(8);
-    bytes.encode_float(0, value);
-
-    return bytes;
+    if(is_double){
+        PackedFloat64Array a;
+        a.append(value);
+        return a.to_byte_array();
+    }
+    else{
+        PackedFloat32Array a;
+        a.append(value);
+        return a.to_byte_array();
+    }
 }
 
 
-float GPU_Float::byte_array_to_float(PackedByteArray bytes)
+double GPU_Float::byte_array_to_float(PackedByteArray bytes)
 {
-    return bytes.decode_float(0);
+    if(is_double){
+        return bytes.decode_double(0);
+    }
+    else{
+        return bytes.decode_float(0);
+    }
 }
 
 
-float GPU_Float::get_data()
+double GPU_Float::get_data()
 {
     return data;
 }
 
 
-void GPU_Float::set_data(float value)
+void GPU_Float::set_data(double value)
 {
     data = value;
 }
@@ -159,6 +169,18 @@ void GPU_Float::set_uniform_type(UNIFORM_TYPES type)
 }
 
 
+bool GPU_Float::get_is_double()
+{
+    return is_double;
+}
+
+
+void GPU_Float::set_is_double(bool value)
+{
+    is_double = value;
+}
+
+
 void GPU_Float::_bind_methods()
 {
     ClassDB::bind_method(D_METHOD("create_uniform"), &GPU_Float::create_uniform);
@@ -176,6 +198,8 @@ void GPU_Float::_bind_methods()
     ClassDB::bind_method(D_METHOD("get_alias"), &GPU_Float::get_alias);
     ClassDB::bind_method(D_METHOD("set_binding", "value"), &GPU_Float::set_binding);
     ClassDB::bind_method(D_METHOD("get_binding"), &GPU_Float::get_binding);
+    ClassDB::bind_method(D_METHOD("set_is_double", "value"), &GPU_Float::set_is_double);
+    ClassDB::bind_method(D_METHOD("get_is_double"), &GPU_Float::get_is_double);
     ClassDB::bind_method(D_METHOD("get_buffer_rid"), &GPU_Float::get_buffer_rid);
     ClassDB::bind_method(D_METHOD("get_uniform"), &GPU_Float::get_uniform);
     ClassDB::bind_method(D_METHOD("get_uniform_type"), &GPU_Float::get_uniform_type);
@@ -185,6 +209,7 @@ void GPU_Float::_bind_methods()
     BIND_ENUM_CONSTANT(STORAGE_BUFFER);
 
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "data"), "set_data", "get_data");
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_double"), "set_is_double", "get_is_double");
     ADD_PROPERTY(PropertyInfo(Variant::STRING, "alias"), "set_alias", "get_alias");
     ADD_PROPERTY(PropertyInfo(Variant::INT, "binding"), "set_binding", "get_binding");
     ADD_PROPERTY(PropertyInfo(Variant::INT, "uniform_type", PROPERTY_HINT_ENUM, "Uniform Buffer,Storage Buffer"), "set_uniform_type", "get_uniform_type");

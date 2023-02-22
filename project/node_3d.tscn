@@ -7,6 +7,7 @@
 data = 1.131
 alias = "test_float"
 uniform_type = 1
+is_double = true
 
 [sub_resource type="GPU_Boolean" id="GPU_Boolean_6ykc0"]
 data = true
