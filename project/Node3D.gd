@@ -4,8 +4,6 @@ extends Node3D
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	
-	
 	print("pre")
 	var f = $ComputeWorker.get_uniform_by_alias("test_float", 0)
 	var g = $ComputeWorker.get_rendering_device()
@@ -52,7 +50,13 @@ func _process(delta):
 #	print(a)
 	
 	var s = $ComputeWorker.get_uniform_data_by_alias("test_signed", 0)
-	print(s)
+#	print(s)
 	
 	var d = $ComputeWorker.get_uniform_data_by_alias("test_unsigned", 0)
-	print(d)
+#	print(d)
+	
+	var e = $ComputeWorker.get_uniform_data_by_alias("test_fvec", 0)
+	print(e)
+	
+	var r = $ComputeWorker.get_uniform_data_by_alias("test_dvec", 0)
+	print(r)

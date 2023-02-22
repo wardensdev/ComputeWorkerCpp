@@ -20,6 +20,14 @@ layout(binding = 3, set = 0) buffer Unsigned{
     uint test_unsigned;
 };
 
+layout(binding = 4, set = 0) buffer FVec{
+    vec4 test_fvec;
+};
+
+layout(binding = 5, set = 0) buffer DVec{
+    dvec4 test_dvec;
+};
+
 void main(){
     test_float += 1.0;
     test_bool = !test_bool;
