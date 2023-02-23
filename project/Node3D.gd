@@ -58,5 +58,5 @@ func _process(delta):
 	var e = $ComputeWorker.get_uniform_data_by_alias("test_fvec", 0)
 	print(e)
 	
-#	var r = $ComputeWorker.get_uniform_data_by_alias("test_dvec", 0)
-#	print(r)
+	var r = $ComputeWorker.get_uniform_data_by_alias("test_dvec", 0)
+	print(r)
