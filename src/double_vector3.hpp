@@ -13,6 +13,8 @@ struct DoubleVector3{
     double z;
 
     _FORCE_INLINE_ DoubleVector3(){}
+    _FORCE_INLINE_ ~DoubleVector3(){}
+
     _FORCE_INLINE_ DoubleVector3(PackedFloat64Array a){
         x = a[0];
         y = a[1];

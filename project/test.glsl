@@ -21,14 +21,11 @@ layout(binding = 3, set = 0) buffer Unsigned{
 };
 
 layout(binding = 4, set = 0) buffer FVec{
-    vec4 test_fvec;
-};
-
-layout(binding = 5, set = 0) buffer DVec{
-    dvec4 test_dvec;
+    dvec4 test_fvec;
 };
 
 void main(){
+    test_fvec.y += 0.01;
     test_float += 1.0;
     test_bool = !test_bool;
 }

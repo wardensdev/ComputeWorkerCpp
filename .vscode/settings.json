@@ -6,6 +6,13 @@
         "xtr1common": "cpp",
         "xutility": "cpp",
         "unordered_map": "cpp",
-        "limits": "cpp"
+        "limits": "cpp",
+        "array": "cpp",
+        "initializer_list": "cpp",
+        "list": "cpp",
+        "vector": "cpp",
+        "xhash": "cpp",
+        "xstring": "cpp",
+        "xtree": "cpp"
     }
 }

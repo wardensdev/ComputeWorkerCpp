@@ -5,12 +5,12 @@ extends Node3D
 func _ready():
 	
 	print("pre")
-	var f = $ComputeWorker.get_uniform_by_alias("test_float", 0)
-	var g = $ComputeWorker.get_rendering_device()
-	var h = $ComputeWorker.get_uniform_set_by_id(0)
-	var j = $ComputeWorker.is_device_processing()
-	var k = $ComputeWorker.uniform_sets
-	var l = $ComputeWorker.get_class()
+#	var f = $ComputeWorker.get_uniform_by_alias("test_float", 0)
+#	var g = $ComputeWorker.get_rendering_device()
+#	var h = $ComputeWorker.get_uniform_set_by_id(0)
+#	var j = $ComputeWorker.is_device_processing()
+#	var k = $ComputeWorker.uniform_sets
+#	var l = $ComputeWorker.get_class()
 	$ComputeWorker.initialize()
 	print("post")
 #	print($ComputeWorker.get_rendering_device())
@@ -58,5 +58,5 @@ func _process(delta):
 	var e = $ComputeWorker.get_uniform_data_by_alias("test_fvec", 0)
 	print(e)
 	
-	var r = $ComputeWorker.get_uniform_data_by_alias("test_dvec", 0)
-	print(r)
+#	var r = $ComputeWorker.get_uniform_data_by_alias("test_dvec", 0)
+#	print(r)

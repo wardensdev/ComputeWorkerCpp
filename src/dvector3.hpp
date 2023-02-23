@@ -7,7 +7,7 @@
 
 using namespace godot;
 
-struct dVector3 : Object{
+struct dVector3 : public Object{
     
     GDCLASS(dVector3, Object);
 
@@ -85,13 +85,87 @@ struct dVector3 : Object{
             ERR_FAIL_MSG("Variant must be Vector3 or PackedFloat**Array for constructor `dVector3(Variant a)`");
         }
     }
-
+    
+    _FORCE_INLINE_ void set_value(Variant value, bool as_double);
+    _FORCE_INLINE_ void set_precision(Precision p);
     _FORCE_INLINE_ PackedFloat32Array to_float32_array() const;
     _FORCE_INLINE_ PackedFloat64Array to_float64_array() const;
     _FORCE_INLINE_ PackedByteArray to_byte_array() const;
     _FORCE_INLINE_ Variant to_variant() const;
     _FORCE_INLINE_ static void _bind_methods();
 };
+
+void dVector3::set_value(Variant value, bool as_double){
+    int a_type = value.get_type();
+
+    if(a_type == Variant::VECTOR3){
+        if(as_double){
+            DoubleVector3 a = DoubleVector3(Vector3(value));
+            dvec = a;
+            precision = Precision::DOUBLE;
+        }
+        else{
+            fvec = value;
+            precision = Precision::FLOAT;
+        }
+    }
+    else if(a_type == Variant::PACKED_FLOAT32_ARRAY){
+
+        PackedFloat32Array float_arr = value;
+        if(as_double){
+            DoubleVector3 a = DoubleVector3(float_arr);
+            dvec = a;
+            precision = Precision::DOUBLE;
+        }
+        else{
+            fvec = Vector3(float_arr[0], float_arr[1], float_arr[2]);
+            precision = Precision::FLOAT;
+        }        
+    }
+    else if(a_type == Variant::PACKED_FLOAT64_ARRAY){
+        PackedFloat64Array float_arr = value;
+        if(as_double){
+            DoubleVector3 a = DoubleVector3(float_arr);
+            dvec = a;
+            precision = Precision::DOUBLE;
+        }
+        else{
+            fvec = Vector3(float_arr[0], float_arr[1], float_arr[2]);
+            precision = Precision::FLOAT;
+        }  
+    }
+    else{
+        ERR_FAIL_MSG("Variant must be Vector3 or PackedFloat**Array for constructor `dVector3(Variant a)`");
+    }
+}
+
+void dVector3::set_precision(Precision p){
+    if(p == Precision::DOUBLE){
+        if(precision == Precision::FLOAT){
+            DoubleVector3 a = DoubleVector3(fvec);
+            dvec = a;
+            precision = p;
+        }
+        else if(precision == Precision::EMPTY){
+            dvec = DoubleVector3();
+            precision = p;
+        }
+    }
+    else if(p == Precision::FLOAT){
+        if(precision == Precision::DOUBLE){
+            Vector3 a = Vector3(dvec.x, dvec.y, dvec.z);
+            fvec = a;
+            precision = p;
+        }
+        else if(precision == Precision::EMPTY){
+            fvec = Vector3();
+            precision = p;
+        }
+    }
+    else{
+        return;
+    }
+}
 
 PackedFloat32Array dVector3::to_float32_array() const{
     PackedFloat32Array a;
@@ -101,12 +175,14 @@ PackedFloat32Array dVector3::to_float32_array() const{
             a.append(dvec.x);
             a.append(dvec.y);
             a.append(dvec.z);
+            a.append(0.0);
             return a;
 
         case Precision::FLOAT:
             a.append(fvec.x);
             a.append(fvec.y);
             a.append(fvec.z);
+            a.append(0.0);
             return a;
 
         default:
@@ -122,12 +198,14 @@ PackedFloat64Array dVector3::to_float64_array() const{
             a.append(dvec.x);
             a.append(dvec.y);
             a.append(dvec.z);
+            a.append(0.0);
             return a;
 
         case Precision::FLOAT:
             a.append((double)fvec.x);
             a.append((double)fvec.y);
             a.append((double)fvec.z);
+            a.append((double)0.0);
             return a;
 
         default:

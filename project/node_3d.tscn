@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://btrxsygj57rwj"]
+[gd_scene load_steps=9 format=3 uid="uid://btrxsygj57rwj"]
 
 [ext_resource type="Script" path="res://Node3D.gd" id="1_p3qyo"]
 [ext_resource type="RDShaderFile" uid="uid://bx0kteiid0ssd" path="res://test.glsl" id="2_ee6qv"]
@@ -29,20 +29,13 @@ binding = 3
 uniform_type = 1
 
 [sub_resource type="GPU_Vector3" id="GPU_Vector3_j0alm"]
-data = Vector3(23, 1.123, 6)
+data = Vector3(12, 1.38, 6)
 alias = "test_fvec"
 binding = 4
 uniform_type = 1
 
-[sub_resource type="GPU_Vector3" id="GPU_Vector3_gv2ty"]
-data = Vector3(188, 2.099, 11)
-is_double = true
-alias = "test_dvec"
-binding = 5
-uniform_type = 1
-
 [sub_resource type="UniformSet" id="UniformSet_tugp4"]
-uniforms = Array[GPUUniform]([SubResource("GPU_Float_vy3l4"), SubResource("GPU_Boolean_6ykc0"), SubResource("GPU_Integer_3vh04"), SubResource("GPU_Integer_3rrtr"), SubResource("GPU_Vector3_j0alm"), SubResource("GPU_Vector3_gv2ty")])
+uniforms = Array[GPUUniform]([SubResource("GPU_Float_vy3l4"), SubResource("GPU_Boolean_6ykc0"), SubResource("GPU_Integer_3vh04"), SubResource("GPU_Integer_3rrtr"), SubResource("GPU_Vector3_j0alm")])
 
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_p3qyo")

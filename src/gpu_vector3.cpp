@@ -16,6 +16,8 @@ GPU_Vector3::~GPU_Vector3(){}
 
 Ref<RDUniform> GPU_Vector3::initialize(RenderingDevice *rd)
 {
+    _data.set_value(data, is_double);
+
     buffer_rid = create_rid(rd);
     return create_uniform();
 }
@@ -45,8 +47,10 @@ Ref<RDUniform> GPU_Vector3::create_uniform()
 
 RID GPU_Vector3::create_rid(RenderingDevice *rd)
 {
-    PackedByteArray bytes = vec3_to_byte_array(data);
-    
+    PackedByteArray bytes = _data.to_byte_array();
+    UtilityFunctions::print(_data.precision);
+    UtilityFunctions::print("create vec rid");
+    UtilityFunctions::print(bytes.size());
     RID buffer;
 
     switch (uniform_type)
@@ -70,6 +74,7 @@ RID GPU_Vector3::create_rid(RenderingDevice *rd)
 Variant GPU_Vector3::get_uniform_data(RenderingDevice *rd)
 {
     PackedByteArray out = rd->buffer_get_data(buffer_rid);
+    UtilityFunctions::print(out.size());
     return byte_array_to_vec3(out);
 }
 
@@ -132,14 +137,7 @@ Vector3 GPU_Vector3::get_data()
 void GPU_Vector3::set_data(Vector3 value)
 {
     data = value;
-
-    if(is_double){
-        DoubleVector3 d = DoubleVector3(data);
-        _data.dvec = d;
-    }
-    else{
-        _data.fvec = data;
-    }
+    _data.set_value((Variant)value, is_double);
 }
 
 
